@@ -1,0 +1,404 @@
+%% Простая презентация с примером включения программного кода и
+%% пошаговых спецэффектов
+\documentclass{beamer}
+\usetheme{SPbAU}
+%\useoutertheme{infolines}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{xecyr}
+\usepackage{hyperref}
+\setmainfont[Mapping=tex-text]{DejaVu Serif}
+\setsansfont[Mapping=tex-text]{DejaVu Sans}
+\setmonofont[Mapping=tex-text]{DejaVu Sans Mono}
+\usepackage{polyglossia}
+\usepackage{appendixnumberbeamer}
+\setdefaultlanguage{russian}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xpatch}
+\newcommand{\commentfont}{\ttfamily}
+\lstdefinestyle{mycode}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  xleftmargin=\parindent,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape\color{gray!40!black},
+  stringstyle=\color{red},
+  numbers=left,
+  numbersep=5pt,
+  numberstyle=\tiny\color{gray},
+  escapeinside=§§,
+  escapebegin=\begin{russian}\commentfont,
+  escapeend=\end{russian},
+}
+\lstset{escapechar=@,style=mycode}
+
+
+\usepackage[backend=biber, style=authortitle, doi=false, url=false]{biblatex}
+\xapptobibmacro{cite}{\setunit{\nametitledelim}\printfield{year}}{}{}
+\addbibresource{presentation-long.bib}
+
+\begin{document}
+\title[Неявные модули в 1ML]{Переоснащение неявных модулей для языка 1ML }
+\author[Трилис А.А.]{Трилис Алексей Андреевич\\{\footnotesize\textcolor{gray}{научный руководитель: к.ф.-м.н. Д.А. Березун}}}
+\institute{НИУ ВШЭ --- Санкт-Петербург}
+\frame{\titlepage}
+
+\begin{frame}\frametitle{Введение. Ad hoc полиморфизм}
+\begin{itemize}
+  \item Ad hoc полиморфизм~--- свойство языка, позволяющее функциям иметь различную семантику в зависимости от типов аргументов
+  \item Например, \texttt{print} и \texttt{+}
+  \item В процедурных и объектно-ориентированных языках обычно достигается перегрузкой
+  \item Но в языках с мощным выводом типов нужны более сложные методы
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Введение. Семейство языков ML}
+\begin{itemize}
+  \item ML, OCaml, SML, F\#, ...
+  \item Функциональные языки с мощным выводом типов
+  \item Продвинутая система модулей, основанная на теории зависимых типов \footcite{dependent_types}
+  \item Активно используется в разработке и исследовании языков программирования
+  \item А также в верификации, финансах, веб-разработке и других областях
+  \item Отсутствует ad hoc полиформизм:
+  \begin{itemize}
+    \item \texttt{+} для \texttt{int}, \texttt{+.} для \texttt{float}
+    \item \texttt{print\_int}, \texttt{print\_float}, \texttt{print\_string}, ...
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Введение. Модули в ML}
+\begin{itemize}
+  \item Язык разделён на два слоя: основной и модульный
+  \item Модульный язык более мощный, но требует избыточности и излишней явности деклараций
+  \item Слои плохо интегрируются между собой: нельзя динамически выбрать модуль
+  \item Нельзя: \begin{lstlisting}
+  module Table = if size > threshold then HashMap else TreeMap
+  \end{lstlisting}
+  \item Можно: \begin{lstlisting}
+  module Table = (val (if size > threshold then (module HashMap : MAP) else (module TreeMap : MAP))) : MAP)
+  \end{lstlisting}
+  \item В некоторых случаях такая интеграция невозможна
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Введение. 1ML}
+\begin{itemize}
+  \item Было показано \footcite{fing}, что модули могут быть выражены и без использования теории зависимых типов
+  \item А именно, что модули можно полностью выразить в System F\textsubscript{$\omega$}
+  \item В результате этих исследований был создан экспериментальный диалект 1ML \footcite{1ml}, где основной и модульный слои объединены
+  \item В нём действительно есть модули первого класса
+\end{itemize}
+\end{frame}
+
+\lstset{language=haskell}
+\begin{frame}[fragile]\frametitle{Обзор литературы. Классы типов}
+\begin{lstlisting}
+class Show a where
+  show :: a -> String
+
+instance Show Int where
+  show = showSignedInt
+
+show_twice x = show x ++ show x
+
+show_twice : Show a => a -> string
+\end{lstlisting}
+\begin{itemize}
+  \item Впервые в Haskell\footcite{adhoc}, затем в Agda, Rust, ...
+  \item Требуется каноничность~--- не более одного экземпляра для каждого типа
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Обзор литературы. Неявные параметры}
+\begin{itemize}
+  \item Впервые в Scala\footcite{implicits}
+  \item Не требуется каноничность, только однозначность
+  \item Требуется явно описать неявные параметры, которые используются в функции
+\end{itemize}
+\end{frame}
+
+\lstset{language=scala}
+\begin{frame}[fragile]\frametitle{Обзор литературы. Неявные параметры}
+\begin{lstlisting}
+trait Showable [T] { def show (x: T): String }
+
+implicit object IntShowable extends Showable [Int] {
+  def show (x: Int) = x.toString
+}
+
+def show[T](x : T)(implicit s: Showable [T]): String = {
+  s.show(x)
+}
+
+show(7)(IntShowable)
+show(7)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}\frametitle{Обзор литературы. Модульные классы типов}
+\begin{itemize}
+  \item Попытка применить классы типов в ML\footcite{ml_typeclasses}
+  \item Каноничность невозможна в модульном языке
+  \item Поэтому решение вводит ряд серьёзных ограничений
+  \begin{itemize}
+    \item Неявные модули могут быть объявлены только на верхнем уровне
+    \item Все модули на верхнем уровне должны быть явно типизированы
+    \item На верхнем уровне могут находиться только модули
+    \item Все неявные модули должны определять тип \texttt{t}, по которому будет проходить унификация 
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Обзор литературы. Неявные модули}
+\begin{itemize}
+  \item Попытка применить неявные параметры в OCaml\footcite{white}, вместо обычных параметров используются модули
+  \item Не нужна каноничность, нет ограничений как в модульных классах типов
+  \item Нет неявных преобразований
+  \item Нет приоритета неявных модулей, несколько подходящих кандидатов приводят к ошибке
+  \item Есть прототип, но в основной язык интегрировать не получилось
+  \item Требуется унификация на модульном уровне, в прототипе недостаточно сильная
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Обзор литературы. Неявные модули}
+\begin{lstlisting}
+module type Show = sig
+  type t
+  val show : t -> string
+end
+
+implicit module Show_int = struct
+  type t = int
+  let show x = string_of_int x
+end
+
+implicit module Show_list {S : Show} = struct
+  type t = S.t list
+  let show x = string_of_list S.show x
+end
+
+let show {S : Show} x = S.show x
+
+show 5 (* show {Show_int} 5 *)
+show [1;2;3] (* show {Show_list (Show_int)} [1;2;3] *)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}\frametitle{Мотивация}
+\begin{itemize}
+  \item Расширение OCaml неявными модулями~--- сложная задача, требующая огромной и практической, и теоретической работы
+  \item Попробуем реализовать неявные модули на более простом диалекте OCaml и попытаемся улучшить слабые стороны предыдущего решения
+  \item Выбран 1ML из-за уникального подхода к модульной системе, который может помочь в получении новых результатов
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Цель и задачи}
+Цель:
+\begin{itemize}
+  \item Дополнить язык 1ML поддержкой неявных модулей
+\end{itemize}
+Задачи:
+\begin{itemize}
+  \item Реализация неявных модулей, повторяющих функциональность решения для OCaml
+  \item Расширение решения новой функциональностью
+  \item Тестирование и сравнение с неявными модулями для OCaml
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Структура рассказа}
+\begin{itemize}
+  \item Общая схема
+  \item Интересные места реализации
+  \begin{itemize}
+    \item Проверка завершаемости
+    \item Генерализация типов
+    \item Локальные неявные модули
+  \end{itemize}
+  \item Новая функциональность
+  \begin{itemize}
+    \item Порядок разрешения
+    \item Неявные функторы
+  \end{itemize}
+  \item Тестирование и сравнение
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Общая схема. Фаза неявных модулей}
+\begin{itemize}
+  \item Обработка неявных модулей тесно связана с выводом типов, одно нельзя сделать до второго. Поэтому их нужно делать в одной фазе компиляции
+  \item Обрабатывая неявную аппликацию, подставим неявную переменную
+  \item Зная, какой нужен тип, нужно найти модуль с таким типом
+  \item Отложим определение этого модуля, будем обрабатывать несколько неявных переменных за раз
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Общая схема. Поиск модулей}
+\begin{itemize}
+  \item Бесконечное число модулей
+  \item Представим текущее состояние поиска как набор ограничений на тип
+  \item Переберём все доступные модули, если подходит под ограничения~--- подставим
+  \item Если это функтор, то запустимся рекурсивно с новыми ограничениями
+  \item Результат~--- "успех", "нет кандидатов", "неоднозначность", "не завершается"
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Проверка завершаемости}
+\begin{lstlisting}
+implicit module Show_it {S : Show} = struct
+  type t = S.t
+  let show = S.show
+end
+\end{lstlisting}
+\begin{itemize}
+  \item Поиск может не завершаться: \texttt{Show\_it(Show\_it(Show\_it...))}
+  \item Нужно определять ситуации, когда алгоритм может не завершиться
+  \item Будем определять незавершаемость, если между двумя применениями одного и того же модуля входные данные не стали меньше
+  \item То есть хотя бы одно ограничение на тип стало меньше, остальные стали не больше
+  \item Нужно подождать, не уточнится ли вход из других веток, и если нет, то завершиться
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Генерализация типов}
+\begin{itemize}
+  \item До какого момента откладывать разрешение неявных переменных?
+  \item Чем дольше, тем больше информации
+  \item В OCaml ~--- до ближайшей генерализации, то есть до ближайшего \texttt{let}-связывания
+  \item Можно пропускать типовые переменные, связанные с неявными переменными, при генерализации
+  \item Тогда в теории можно откладывать разрешение до самого конца обработки программы
+  \item В реализации откладываем до ближайшего объявления на верхнем уровне
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Локальные неявные модули}
+\begin{lstlisting}
+let f = show 5 ^ " " ^
+  (let implicit module Show_float = struct
+      type t = float
+      let show x = string_of_float x
+   end in show 3.14)
+\end{lstlisting}
+\begin{itemize}
+\item Так как разрешение неявных переменных отложено, к моменту разрешения некоторые модули могут выйти из контекста
+\item Храним дерево из неявных модулей и побочной информации
+\item Каждая неявная переменная сопоставляется с вершиной в дереве, может использовать модули на пути от этой вершины до корня
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Порядок разрешения. Мотивация}
+\begin{itemize}
+  \item В решении для OCaml неявные переменные разрешаются в некотором фиксированном порядке
+  \item Это уменьшает полноту решения, например, нельзя реализовать сложение \texttt{int} с \texttt{float}
+  \item Будем запускать разрешение неявных переменных несколько раз, с появлением новой информации
+  \item Запоминаем и используем предыдущие результаты
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Порядок разрешения. Пример}
+\begin{lstlisting}
+module type Num = sig
+  type t and u and res
+  val ( + ) : t -> u -> res
+end;;
+
+let ( + ) {N : Num} = N.( + );;
+
+implicit module Float_Float = struct
+  type t = float and u = float and res = float
+  let ( + ) = ( +. )
+end;;
+implicit module Int_Float = struct
+  type t = int and u = float and res = float
+  let (+) l r = (float_of_int l) +. r
+end;;
+
+(* Int_Int и Float_Int §пропущены для краткости§ *)
+
+print_float (1 + 1.1 + 2.5);; (* неоднозначность! *)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}\frametitle{Порядок разрешения. Постановка задачи}
+\begin{itemize}
+  \item Каждая неявная переменная характеризуется своим типом, зависящим от нуля или нескольких типовых переменных: $T_i(x_{a_{i,1}}, \dots, x_{a_{i,n_i}})$
+  \item Типовые переменные $x_k$ могут повторяться для разных $T_i$
+  \item После поиска модуля по $T_i$ могут быть определены все или некоторые из $x_{a_{i,1}}, \dots, x_{a_{i,n_i}}$
+  \item Если поиск модуля вернул "нет кандидатов", то нужно завершить алгоритм. В случаях же "неоднозначность" или "не завершается" нужно подождать новой информации
+  \item Для $N$ неявных переменных в худшем случае потребуется $\mathcal{O}(N^2)$ запусков поиска 
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Порядок разрешения. Алгоритм}
+\begin{enumerate}
+  \item На каждом шаге, если нашлось такое $T_i$, что все $x_{a_{i,j}}$, от которых оно зависит, уникальны~--- обработать его
+  \item Если таких не нашлось, обработать любой $T_i$, который ни разу не был обработан
+  \item Если и таких не нашлось, обработать $T_i$, с момента последней неудачной обработки которого хотя бы одна из $x_{a_{i,j}}$ была определена
+\end{enumerate}
+Сложность: $\mathcal{O}(N + K)$ запусков поиска, где $K = \sum\limits_i n_i$
+Эвристики:
+\begin{itemize}
+  \item В (2) обработать сначала $T_i$ с меньшим числом переменных
+  \item В (3) обработать сначала $T_i$, про который стало известно больше новой информации
+\end{itemize}
+\end{frame}
+
+\lstset{language=caml}
+\begin{frame}[fragile]\frametitle{Неявные функторы}
+Допустим, есть \texttt{Show\_list1} и \texttt{Show\_list2} с одинаковой сигнатурой, нужно выбрать из них явно
+\begin{lstlisting}
+show {Show_list1 (Show_pair (Show_int Show_bool)}
+  [(1, true); (2, false)]
+
+(* §Слишком длинно. В OCaml можно только так§ *)
+
+show {Show_list1} [(1, true); (2, false)]
+
+(* §В 1ML можно поддержать такое§ *)
+\end{lstlisting}
+Это достигнуто за счёт того, что в 1ML различие между функциями и функторами существенно меньше
+\end{frame}
+
+\begin{frame}\frametitle{Тестирование и сравнение}
+\begin{itemize}
+  \item Нет существующей кодовой базы ни на OCaml, ни на 1ML
+  \item Нужно собрать собственный набор тестов
+  \item Источники:
+  \begin{itemize}
+    \item Набор тестов для решения на OCaml и примеры из статей
+    \item Тесты на порядок разрешения и на неявные функторы
+    \item Тесты, аналогичные коду на других языках с неявными параметрами (Scala)
+    \item Реализация стандартных функциональных структур (например, монады)
+    \item Тесты, написанные в логической парадигме
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Результаты}
+\begin{itemize}
+    \item Реализованы неявные модули как расширение компилятора языка 1ML
+    \item Решение работает на тестах, на которых работает решение для OCaml
+    \item Также работает на тестах, которые в OCaml не поддерживаются
+    \begin{itemize}
+        \item Порядок разрешения
+        \item Неявные функторы
+    \end{itemize}
+    \item Тестовый набор будет дополняться 
+\end{itemize}
+\end{frame}
+
+\appendix
+
+\begin{frame}[allowframebreaks]\frametitle{Ссылки}
+\printbibliography
+\end{frame}
+
+\end{document}

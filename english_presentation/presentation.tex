@@ -1,0 +1,189 @@
+%!TEX TS-program = xelatex
+\documentclass{beamer}
+
+\usepackage{HSE-theme/beamerthemeHSE-en} % Load HSE theme
+
+%%% Fonts 
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures={TeX},Renderer=Basic}
+\setmainfont[Ligatures={TeX,Historic}]{Arial} % install Myriad Pro or replace with Arial
+\setsansfont{Arial}  % install Myriad Pro or replace with Arial
+\setmonofont{Courier New}
+
+\usepackage{multicol}       % Multiple columns
+\graphicspath{{images/}}    % Images folder
+
+\usepackage[
+backend=biber,
+style=apa,
+citestyle=authoryear
+]{biblatex}
+\addbibresource{presentation.bib}
+
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\textcolor{green}{\ding{51}} \hspace{4pt}}%
+\newcommand{\xmark}{\textcolor{red}{\ding{55}} \hspace{4pt}}%
+
+
+
+%%% Author and speech
+\title[Retrofitting Implicit Modules for 1ML]{Retrofitting Implicit Modules for 1ML} 
+\subtitle{Research Proposal}
+\author[Alexey Trilis]{Alexey Trilis, group BPM171 \\
+Scientific Advisor: Daniil Berezun, PhD}
+%, Research Associate at ITMO University
+\institute[Higher School of Economics]{National Research University Higher School of Economics \\
+St. Petersburg School of Physics, Mathematics, and Computer Science}
+%\\ Department of Applied Mathematics and Business Informatics
+\date{Saint Petersburg, 2021}
+
+\begin{document}    % Document begins
+\frame[plain]{\titlepage}   % Title frame
+
+\section{Just some text}
+\subsection{Subtitle}
+
+\begin{frame}{Outline}
+\begin{itemize}
+    \item Background Information
+    \item Motivation
+    \item Research Objective
+    \item Literature Review
+    \item Methodology
+    \item Anticipated Results
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background Information 1/3}{Ad hoc polymorphism}
+\textbf{Ad hoc polymorphism}
+\begin{itemize}
+\item Functions with the same name having different semantics depending on argument types.
+\item Such as \texttt{+} or \texttt{print}
+\end{itemize}
+
+\textbf{Approaches}
+\begin{itemize}
+\item \textit{Type classes}, like in Haskell (\cite{adhoc})
+\item \textit{Implicits}, like in Scala (\cite{implicits})
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Background Information 2/3}{ML languages}
+\textbf{ML language family}
+\begin{itemize}
+    \item ML, SML, OCaml, F\#, many others
+    \item Powerful type inference
+    \item Advanced module system
+    \item Applications: compiler development, static program analysis, automatic theorem proving, financial systems, web development
+\end{itemize}
+\textbf{No ad hoc polymorphism!}
+\begin{itemize}
+    \item Need to use \texttt{+}, \texttt{+.}, \texttt{print\_int}, \texttt{print\_string}, etc.
+    \item Undesirable verbosity
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background Information 3/3}{1ML}
+\textbf{ML modules}
+\begin{itemize}
+    \item Two languages: core and module
+    \item Module language is more powerful, built on dependent-type machinery (\cite{dependent_types})
+    \item Module language is verbose and difficult to integrate with core language
+\end{itemize}
+\textbf{1ML}
+\begin{itemize}
+    \item Later research showed that dependent types are not actually needed (\cite{fing})
+    \item 1ML (\cite{1ml}) is an experimental ML dialect in which core and module languages are united
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Motivation}
+\begin{itemize}
+    \item Extending ML with implicits is highly desirable by users
+    \item However, it is not an easy task
+    \item We limit ourselves to a simpler language
+    \item However, because of some 1ML's design choices, we can achieve new results not currently possible in more mature ML languages
+    \item Also this project can be viewed as test of expressiveness for 1ML
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Research Objective}
+\textbf{Research objective.} 
+Design implicit modules for 1ML.
+\textbf{Subgoals}
+\begin{itemize}
+    \item Reproduce all results already described for OCaml
+    \item Improve completeness of these results by paying special attention to resolve order and unification
+    \item Compare implementation with OCaml one
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Literature Review}
+\begin{itemize}
+    \item \cite{ml_typeclasses}~---~designing type classes for ML
+    \begin{itemize}
+        \item Type classes require \textit{canonicity}
+        \item In ML languages, canonicity is impossible to achieve
+        \item Without canonicity, authors impose rather severe restrictions
+    \end{itemize}
+    \item \cite{white}~---~designing implicits for OCaml
+    \begin{itemize}
+        \item Only prototype implementation, merging in OCaml is years away
+        \item Both practical and theoretical difficulties
+        \item Needs \textit{higher-order unification}, which OCaml currently lacks
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Methodology}
+\begin{itemize}
+    \item Resolving of implicits must be done simultaneously with type inference
+    \item Delaying resolve while it is possible
+    \item Recursive search based on a set of type constraints
+    \item Termination check
+    \item Retrying ambiguous resolve with new information
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anticipated Results}
+\begin{itemize}
+    \item Implementated implicits for 1ML, as part of 1ML prototype compiler
+    \item We test our implementation by comparing its strength against OCaml solution
+    \item Our solution works in all cases where OCaml solution works
+    \item There are cases (mostly related to order and retrying) where our solution works while OCaml solution does not
+    \item We support \textit{implicit functors}, which are listed By OCaml solution's authors as a natural future work  
+    \item \textcolor{gray}{Results related to unification}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t, allowframebreaks]
+\frametitle{References}
+\printbibliography
+\end{frame}
+
+
+\begin{frame}[c]
+\begin{center}
+\frametitle{\LARGE Thank you for your attention!}   
+
+{\LARGE \inserttitle}
+
+{\insertsubtitle}
+
+\bigskip
+
+{\insertauthor} 
+
+\bigskip\bigskip
+
+{\insertinstitute}
+
+\bigskip\bigskip
+
+{\large \insertdate}
+\end{center}
+\end{frame}
+
+\end{document}

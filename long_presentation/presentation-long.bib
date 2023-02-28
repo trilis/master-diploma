@@ -1,0 +1,105 @@
+@inproceedings{1ml,
+author = {Rossberg, Andreas},
+title = {{1ML} – Core and Modules United ({F-ing} First-Class Modules)},
+year = {2015},
+isbn = {9781450336697},
+url = {https://doi.org/10.1145/2784731.2784738},
+doi = {10.1145/2784731.2784738},
+abstract = { ML is two languages in one: there is the core, with types and expressions, and there are modules, with signatures, structures and functors. Modules form a separate, higher-order functional language on top of the core. There are both practical and technical reasons for this stratification; yet, it creates substantial duplication in syntax and semantics, and it reduces expressiveness. For example, selecting a module cannot be made a dynamic decision. Language extensions allowing modules to be packaged up as first-class values have been proposed and implemented in different variations. However, they remedy expressiveness only to some extent, are syntactically cumbersome, and do not alleviate redundancy. We propose a redesign of ML in which modules are truly first-class values, and core and module layer are unified into one language. In this "1ML", functions, functors, and even type constructors are one and the same construct; likewise, no distinction is made between structures, records, or tuples. Or viewed the other way round, everything is just ("a mode of use of") modules. Yet, 1ML does not require dependent types, and its type structure is expressible in terms of plain System Fω, in a minor variation of our F-ing modules approach. We introduce both an explicitly typed version of 1ML, and an extension with Damas/Milner-style implicit quantification. Type inference for this language is not complete, but, we argue, not substantially worse than for Standard ML. An alternative view is that 1ML is a user-friendly surface syntax for System Fω that allows combining term and type abstraction in a more compositional manner than the bare calculus. },
+}
+
+@article{white,
+   title={Modular implicits},
+   ISSN={2075-2180},
+   url={http://dx.doi.org/10.4204/EPTCS.198.2},
+   DOI={10.4204/eptcs.198.2},
+   author={White, Leo and Bour, Frédéric and Yallop, Jeremy},
+   year={2015},
+}
+
+@inproceedings{adhoc,
+author = {Wadler, P. and Blott, S.},
+title = {How to Make Ad-Hoc Polymorphism Less Ad Hoc},
+year = {1989},
+isbn = {0897912942},
+url = {https://doi.org/10.1145/75277.75283},
+doi = {10.1145/75277.75283},
+abstract = {This paper presents type classes, a new approach to ad-hoc polymorphism. Type classes permit overloading of arithmetic operators such as multiplication, and generalise the “eqtype variables” of Standard ML. Type classes extend the Hindley/Milner polymorphic type system, and provide a new approach to issues that arise in object-oriented programming, bounded type quantification, and abstract data types. This paper provides an informal introduction to type classes, and defines them formally by means of type inference rules.},
+}
+
+@inproceedings{ml_typeclasses,
+author = {Dreyer, Derek and Harper, Robert and Chakravarty, Manuel M. T. and Keller, Gabriele},
+title = {Modular Type Classes},
+year = {2007},
+isbn = {1595935754},
+url = {https://doi.org/10.1145/1190216.1190229},
+doi = {10.1145/1190216.1190229},
+abstract = {ML modules and Haskell type classes have proven to be highly effective tools for program structuring. Modules emphasize explicit configuration of program components and the use of data abstraction. Type classes emphasize implicit program construction and ad hoc polymorphism. In this paper, we show how the implicitly-typed style of type class programming may be supported within the framework of an explicitly-typed module language by viewing type classes as a particular mode of use of modules. This view offers a harmonious integration of modules and type classes, where type class features, such as class hierarchies and associated types, arise naturally as uses of existing module-language constructs, such as module hierarchies and type components. In addition, programmers have explicit control over which type class instances are available for use by type inference in a given scope. We formalize our approach as a Harper-Stone-style elaboration relation, and provide a sound type inference algorithm as a guide to implementation.},
+keywords = {type classes, modules, type systems, type inference},
+}
+
+@inproceedings{dependent_types,
+author = {MacQueen, David B.},
+title = {Using Dependent Types to Express Modular Structure},
+year = {1986},
+isbn = {9781450373470},
+url = {https://doi.org/10.1145/512644.512670},
+doi = {10.1145/512644.512670},
+abstract = {Writing any large program poses difficult problems of organization. In many modern programming languages these problems are addressed by special linguistic constructs, variously known as modules, packages, or clusters, which provide for partitioning programs into manageable components and for securely combining these components to form complete programs. Some general purpose components are able to take on a life of their own, being separately compiled and stored in libraries of generic, reusable program units. Usually modularity constructs also support some form of information hiding, such as "abstract data types." "Programming in the large" is concerned with using such constructs to impose structure on large programs, in contrast to "programming in the small", which deals with the detailed implementation of algorithms in terms of data structures and control constructs. Our goal here is to examine some of the proposed linguistic notions with respect to how they meet the pragmatic requirements of programming in the large.},
+}
+
+@inproceedings{fing,
+author = {Rossberg, Andreas and Russo, Claudio V. and Dreyer, Derek},
+title = {F-Ing Modules},
+year = {2010},
+isbn = {9781605588919},
+url = {https://doi.org/10.1145/1708016.1708028},
+doi = {10.1145/1708016.1708028},
+abstract = {ML modules are a powerful language mechanism for decomposing programs into reusable components. Unfortunately, they also have a reputation for being "complex" and requiring fancy type theory that is mostly opaque to non-experts. While this reputation is certainly understandable, given the many non-standard methodologies that have been developed in the process of studying modules, we aim here to demonstrate that it is undeserved. To do so, we give a very simple elaboration semantics for a full-featured, higher-order ML-like module language. Our elaboration defines the meaning of module expressions by a straightforward, compositional translation into vanilla System F-ω (the higher-order polymorphic λ-calculus), under plain F-ω typing environments. We thereby show that ML modules are merely a particular mode of use of System F-ω.Our module language supports the usual second-class modules with Standard ML-style generative functors and local module definitions. To demonstrate the versatility of our approach, we further extend the language with the ability to package modules as first-class values---a very simple extension, as it turns out. Our approach also scales to handle OCaml-style applicative functor semantics, but the details are significantly more subtle, so we leave their presentation to a future, expanded version of this paper.Lastly, we report on our experience using the "locally nameless" approach in order to mechanize the soundness of our elaboration semantics in Coq.},
+keywords = {system f, existential types, first-class modules, abstract data types, type systems, ml modules, elaboration},
+}
+
+@inproceedings{implicits,
+author = {Oliveira, Bruno C.d.S. and Moors, Adriaan and Odersky, Martin},
+title = {Type Classes as Objects and Implicits},
+year = {2010},
+isbn = {9781450302036},
+url = {https://doi.org/10.1145/1869459.1869489},
+doi = {10.1145/1869459.1869489},
+abstract = {Type classes were originally developed in Haskell as a disciplined alternative to ad-hoc polymorphism. Type classes have been shown to provide a type-safe solution to important challenges in software engineering and programming languages such as, for example, retroactive extension of programs. They are also recognized as a good mechanism for concept-based generic programming and, more recently, have evolved into a mechanism for type-level computation.This paper presents a lightweight approach to type classes in object-oriented (OO) languages with generics using the CONCEPT pattern and implicits (a type-directed implicit parameter passing mechanism). This paper also shows how Scala's type system conspires with implicits to enable, and even surpass, many common extensions of the Haskell type class system, making Scala ideally suited for generic programming in the large.},
+keywords = {abstract datatypes, c++ concepts, type classes, scala},
+}
+
+@InProceedings{packaged,
+author="Russo, Claudio V.",
+editor="Smolka, Gert",
+title="First-Class Structures for {Standard} {ML}",
+booktitle="Programming Languages and Systems",
+year="2000",
+abstract="Standard ML is a statically typed programming language that is suited for the construction of both small and large programs. ``Programming in the small'' is captured by Standard ML's Core language. ``Programming in the large'' is captured by Standard ML's Modules language that provides constructs for organising related Core language definitions into self-contained modules with descriptive interfaces. While the Core is used to express details of algorithms and data structures, Modules is used to express the overall architecture of a software system. The Modules and Core languages are stratified in the sense that modules may not be manipulated as ordinary values of the Core. This is a limitation, since it means that the architecture of a program cannot be reconfigured according to run-time demands. We propose a novel extension of the language that allows modules to be manipulated as first-class values of the Core language. The extension greatly extends the expressive power of the language and has been shown to be compatible with both Core type inference and a separate extension to higher-order modules.",
+isbn="978-3-540-46425-9",
+url = {https://doi.org/10.1007/3-540-46425-5_22},
+doi = {10.1007/3-540-46425-5_22}
+}
+
+@inproceedings{agda,
+author = {Devriese, Dominique and Piessens, Frank},
+title = {On the Bright Side of Type Classes: Instance Arguments in {Agda}},
+year = {2011},
+isbn = {9781450308656},
+url = {https://doi.org/10.1145/2034773.2034796},
+doi = {10.1145/2034773.2034796},
+abstract = {We present instance arguments: an alternative to type classes and related features in the dependently typed, purely functional programming language/proof assistant Agda. They are a new, general type of function arguments, resolved from call-site scope in a type-directed way. The mechanism is inspired by both Scala's implicits and Agda's existing implicit arguments, but differs from both in important ways. Our mechanism is designed and implemented for Agda, but our design choices can be applied to other programming languages as well.Like Scala's implicits, we do not provide a separate structure for type classes and their instances, but instead rely on Agda's standard dependently typed records, so that standard language mechanisms provide features that are missing or expensive in other proposals. Like Scala, we support the equivalent of local instances. Unlike Scala, functions taking our new arguments are first-class citizens and can be abstracted over and manipulated in standard ways. Compared to other proposals, we avoid the pitfall of introducing a separate type-level computational model through the instance search mechanism. All values in scope are automatically candidates for instance resolution. A final novelty of our approach is that existing Agda libraries using records gain the benefits of type classes without any modification.We discuss our implementation in Agda (to be part of Agda 2.2.12) and we use monads as an example to show how it allows existing concepts in the Agda standard library to be used in a similar way as corresponding Haskell code using type classes. We also demonstrate and discuss equivalents and alternatives to some advanced type class-related patterns from the literature and some new patterns specific to our system.},
+keywords = {agda, type classes, ad hoc polymorphism, instance arguments},
+}
+
+@inproceedings{rust,
+author = {Matsakis, Nicholas D. and Klock, Felix S.},
+title = {The {Rust} Language},
+year = {2014},
+isbn = {9781450332170},
+url = {https://doi.org/10.1145/2663171.2663188},
+doi = {10.1145/2663171.2663188},
+abstract = {Rust is a new programming language for developing reliable and efficient systems. It is designed to support concurrency and parallelism in building applications and libraries that take full advantage of modern hardware. Rust's static type system is safe1 and expressive and provides strong guarantees about isolation, concurrency, and memory safety.Rust also offers a clear performance model, making it easier to predict and reason about program efficiency. One important way it accomplishes this is by allowing fine-grained control over memory representations, with direct support for stack allocation and contiguous record storage. The language balances such controls with the absolute requirement for safety: Rust's type system and runtime guarantee the absence of data races, buffer overflows, stack overflows, and accesses to uninitialized or deallocated memory.},
+keywords = {rust, affine type systems, memory management, systems programming},
+}
