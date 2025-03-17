@@ -4,3 +4,8 @@
 *.log
 *.out
 *.pdf
+*.toc
+*.bcf
+*.nav
+*.run.xml
+*.snm
