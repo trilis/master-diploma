@@ -74,25 +74,21 @@
 \addbibresource{presentation-short.bib}
 
 \begin{document}
-\title[Неявные модули в 1ML]{Переоснащение неявных модулей для языка 1ML }
-\author[Трилис А.А.]{Трилис Алексей Андреевич\\{\footnotesize\textcolor{gray}{научный руководитель: к.ф.-м.н. Д.А. Березун}}}
+\title[Стратегии редукции термов]{Эвристические стратегии редукции термов в задачах формальной верификации}
+\author[Трилис А.А.]{Трилис Алексей Андреевич\\{\footnotesize\textcolor{gray}{научный руководитель: А.М.Ляшин}}}
 \institute{НИУ ВШЭ --- Санкт-Петербург}
-\date{11 июня 2021 г.}
+\date{?? июня 2025 г.}
 \frame{\titlepage}
 
 \begin{frame}\frametitle{Введение}
 \begin{itemize}
-  \item Ad-hoc-полиморфизм~--- свойство языка, позволяющее функциям иметь различную семантику в зависимости от типов аргументов
-  \item Часто достигается перегрузкой, но в языках с мощным выводом типов нужны более сложные методы
-  \item В семействе языков ML ad-hoc-полиморфизм до сих пор не поддерживается
-  \item \texttt{+} для \texttt{int}, \texttt{+.} для \texttt{float}
-
-  \texttt{print\_int}, \texttt{print\_float}, \texttt{print\_string}, ...
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
 \lstset{language=haskell}
-\begin{frame}[fragile]\frametitle{Обзор литературы}
+\begin{frame}\frametitle{Обзор литературы}
 \begin{itemize}
   \item Согласованность~--- каждая типизация программы должна приводить к одной и той же семантике
   \item Каноничность~--- в области видимости не более одного экземпляра для каждого типа 
@@ -111,235 +107,103 @@
 \end{itemize}
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Неявные модули}
-\begin{lstlisting}[style=base]
-§module type Show = sig
-  type t
-  val show : t -> string
-end
-§§
-implicit module Show_int = struct 
-  type t = int
-  let show x = string_of_int x
-end
-§§
-implicit module Show_list {S : Show} = struct 
-  type t = S.t list
-  let show x = string_of_list S.show x
-end
-§§
-let show {S : Show} x = S.show x 
-
-§§show 5 (* show {Show_int} 5 *)
-show [1;2;3] (* show {Show_list {Show_int}} [1;2;3] *)§
-\end{lstlisting}
+\begin{frame}\frametitle{1}
 \end{frame}
 
-\begin{frame}\frametitle{1ML}
+\begin{frame}\frametitle{2}
 \begin{itemize}
-  \item В ML исторически язык разделён на основной язык и более мощный и избыточный модульный язык
-  \item Интеграция этих слоёв затруднена
-  \item Экспериментальный диалект 1ML\footcite{1ml} решает эту проблему: в нём нет существенного различия между основным языком и модулями
-  \item Предположительно, такой подход позволит добавить новую функциональность, например, ad-hoc-полиморфизм
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Цель и задачи}
-\textbf{Цель}: Разработать поддержку неявных модулей для языка 1ML, которое будет более полным, чем аналогичное решение для OCaml, в том числе включать поддержку неявных аргументов для функторов
+\textbf{Цель}: TODO
 
 \textbf{Задачи}:
 \begin{itemize}
-  \item Реализация неявных модулей для 1ML, повторяющих функциональность решения для OCaml
-  \item Разработка алгоритма, позволяющего полно и эффективно осуществлять вставку неявных модулей
-  \item Поддержка неявных аргументов для функторов
-  \item Сравнение с решением для OCaml
+  \item TODO
+  \item TODO
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Общая схема}
+\begin{frame}\frametitle{3}
 \begin{itemize}
-  \item На месте, где должен стоять модуль, подставим неявную переменную
-  \item Пока не знаем значение, но знаем тип
-  \item Отложим определение этого модуля, будем обрабатывать несколько неявных переменных за раз
-  \item Представим текущее состояние поиска как набор ограничений на тип
-  \item Переберём все доступные модули, если подходит под ограничения~--- подставим
-  \item Если это функтор, то запустимся рекурсивно с новыми ограничениями
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Детали решения}
+\begin{frame}\frametitle{4}
 \begin{itemize}
-  \item Проверка завершаемости
-  \begin{itemize}
-    \item В рекурсии проверяем, что хотя бы одно ограничение уменьшилось, а остальные не стали больше
-  \end{itemize}
-  \item В какой момент разрешаем накопившиеся переменные?
-  \begin{itemize}
-    \item Дойдя до объявления верхнего уровня
-    \item Но в теории можно в любой момент
-  \end{itemize}
-  \item Локальные неявные модули
-  \begin{itemize}
-    \item В момент разрешения модули могут выйти из контекста
-    \item Храним дерево из неявных модулей и побочной информации
-  \end{itemize}
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Порядок разрешения. Мотивация}
+\begin{frame}\frametitle{5}
 \begin{itemize}
-  \item В решении для OCaml неявные переменные разрешаются в некотором фиксированном порядке
-  \item Это уменьшает полноту решения
-  \item В этой работе найдено, что решение для OCaml не работает в простых случаях: невозможно реализовать сложение переменных типа \texttt{int} и \texttt{float}
-  \item Будем запускать разрешение неявных переменных несколько раз, с появлением новой информации
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Порядок разрешения. Алгоритм}
+\begin{frame}\frametitle{6}
 \begin{itemize}
-  \item Обрабатываем неявные переменные в следующем порядке:
-  \begin{enumerate}
-    \item Независимые от других ещё не разрешённых
-    \item Не обработанные раннее
-    \item Те, с последней обработки которых была получена новая информация
-  \end{enumerate}
-  \item Несколько эвристик
-  \item В случаях, которые были поддержаны раньше, работает столь же эффективно
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Неявные аргументы для функторов}
-Есть \texttt{Show\_list1} и \texttt{Show\_list2}, нужно выбрать из них явно
-\begin{lstlisting}[style=base2]
-show {Show_list1 {Show_pair {Show_int} {Show_bool}}}
-  [(1, true); (2, false)]
-
-(* Слишком длинно. В OCaml можно только так *)
-
-show {Show_list1 [_]} [(1, true); (2, false)]
-
-(* В 1ML можно поддержать такое *)
-\end{lstlisting}
-Это достигнуто за счёт того, что в 1ML различие между функциями и функторами существенно меньше
+\begin{frame}\frametitle{7}
+TODO
 \end{frame}
 
-\begin{frame}\frametitle{Сравнение}
+\begin{frame}\frametitle{8}
 \begin{itemize}
-  \item Тест~--- две аналогичные программы на OCaml и на 1ML
-  \item Проверяем, корректна ли проверка типов для теста в каждом из языков
-  \item Сейчас около 30 тестов
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Результаты}
 \begin{itemize}
-    \item Реализованы неявные модули как расширение компилятора языка 1ML
-    \item Решение работает на тестах, на которых работает решение для OCaml
-    \item Также работает на тестах, которые в OCaml не поддерживаются
-    \begin{itemize}
-        \item \textbf{Порядок разрешения}
-
-        Идея алгоритма может быть использована в OCaml
-        \item \textbf{Неявные аргументы для функторов}
-
-        Результат достигнут из-за особенностей 1ML
-    \end{itemize}
-    \item Работа представляет дополнительный аргумент в пользу диалектов с однородным подходом к модулям
+    \item TODO
+    \item TODO
+    \item TODO
+    \item TODO
 \end{itemize}
-Репозиторий: \url{github.com/trilis/1ml}
 \end{frame}
 
 \appendix
 \backupbegin
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Детали алгоритма. Примеры}
-Пример модуля, в присутствии которого поиск не будет завершаться:
-\begin{lstlisting}[style=base2]
-implicit module Show_it {S : Show} = struct
-  type t = S.t
-  let show = S.show
-end
-\end{lstlisting}
-Пример локального неявного модуля:
-\begin{lstlisting}[style=base2]
-let f = show 5 ^ " " ^
-  (let implicit module Show_float = struct
-      type t = float
-      let show x = string_of_float x
-   end in show 3.14)
-\end{lstlisting}
+\begin{frame}\frametitle{Apx 1}
+TODO
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Порядок разрешения. Пример}
-\begin{lstlisting}[style=base2]
-module type Num = sig
-  type t and u and res
-  val ( + ) : t -> u -> res
-end;;
-
-let ( + ) {N : Num} = N.( + );;
-
-implicit module Float_Float = struct
-  type t = float and u = float and res = float
-  let ( + ) = ( +. )
-end;;
-implicit module Int_Float = struct
-  type t = int and u = float and res = float
-  let (+) l r = (float_of_int l) +. r
-end;;
-
-(* Int\_Int и Float\_Int пропущены для краткости *)
-
-print_float (1 + 1.1 + 2.5);; (* неоднозначность! *)
-\end{lstlisting}
+\begin{frame}\frametitle{Apx 2}
+TODO
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Порядок разрешения. Эвристики}
-\begin{enumerate}
-    \item Независимые от других ещё не разрешённых
-    \item Не обработанные раннее
-    \item Те, с последней обработки которых была получена новая информация
-  \end{enumerate}
+\begin{frame}\frametitle{Apx 3}
 \begin{itemize}
-  \item В (2) обработать сначала неявные переменные с меньшим числом типовых переменных
-  \item В (3) обработать сначала те, про которых стало известно больше новой информации
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
-\lstset{language=caml}
-\begin{frame}[fragile]\frametitle{Невозможность каноничности в OCaml}
-\begin{lstlisting}[style=base2]
-module F (X : Show) = struct
-  implicit module S = X
-end
-
-implicit module Show_int = struct
-  type t = int
-  let show = string_of_int
-end
-
-module M = struct
-  type t = int
-  let show _ = "An int"
-end
-
-module N = F(M)
-\end{lstlisting}
+\begin{frame}\frametitle{Apx 4}
+TODO
 \end{frame}
 
 
-\begin{frame}\frametitle{Ограничения на модульные классы типов}
+\begin{frame}\frametitle{Apx 5}
 \begin{itemize}
-  \item Неявные модули могут быть объявлены только на верхнем уровне
-  \item Все модули на верхнем уровне должны быть явно типизированы
-  \item На верхнем уровне могут находиться только модули
-  \item Все неявные модули должны определять тип \texttt{t}, по которому будет проходить унификация 
+  \item TODO
+  \item TODO
 \end{itemize}
 \end{frame}
 
