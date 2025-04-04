@@ -9,3 +9,4 @@
 *.nav
 *.run.xml
 *.snm
+.DS_Store
