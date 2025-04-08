@@ -10,3 +10,4 @@
 *.run.xml
 *.snm
 .DS_Store
+_minted/
