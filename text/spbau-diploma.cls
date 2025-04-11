@@ -75,6 +75,8 @@
 %% we don't need to load graphicx since it will be loaded by xunicode (which is loaded by fontspec) 
 \usepackage[titletoc]{appendix}
 
+\usepackage{wrapfig}
+
 %% Эта команда добавляет отчеркнутое место для подписи после имени
 %% Аргументы: имя и пояснение под чертой (например, слово "подпись")
 \def\sigspace{\\[3em]}
