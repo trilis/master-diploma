@@ -13,11 +13,12 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage[stable]{footmisc}
+\usepackage{subcaption}
 \begin{document}
 \renewcommand\listingscaption{Листинг}
 \newenvironment{megaalgorithm}[1][htb]{
     \floatname{algorithm}{Стратегия}%% Update algorithm name
-   \begin{algorithm}%
+   \begin{algorithm}[H]
   }{\end{algorithm}}
 
 %\includepdf[pages=-]{title.pdf}
