@@ -223,7 +223,7 @@ TODO
     \For{$i \gets 1$ to $|Y|$}
         \If{\textcolor{red}{$typeof(y_i)$ is $LocalStateMapping$ or $FieldType$}}
             \For{$j \gets i + 1$ to $n$}
-                \State $T_j = T_j [y_i := T_i]$
+                \State $T_j \gets T_j [y_i := T_i]$
             \EndFor
             \State $P \gets P [y_i := T_i]$
             \State $Y\gets Y \setminus (y_i, T_i)$

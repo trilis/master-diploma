@@ -7,10 +7,6 @@
 % 2. under the GNU Public License.
 %
 
-\DeclareOptionBeamer{shadow}[true]{\def\beamer@themerounded@shadow{#1}}
-\ExecuteOptionsBeamer{shadow=false}
-\ProcessOptionsBeamer
-
 \mode<presentation>
 
 % Redefine title page
@@ -42,11 +38,11 @@
   \vfill
 }
 
-\setbeamertemplate{blocks}[rounded][shadow=\beamer@themerounded@shadow]
+\setbeamertemplate{blocks}[rounded]
 \setbeamertemplate{items}[ball]
 \setbeamertemplate{sections/subsections in toc}[ball]
-\setbeamertemplate{title page}[SPbAU][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
-\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true,shadow=\beamer@themerounded@shadow]
+\setbeamertemplate{title page}[SPbAU][colsep=-4bp,rounded=true]
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true]
   
 \mode<all>
 
