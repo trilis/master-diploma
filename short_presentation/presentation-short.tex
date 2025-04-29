@@ -86,7 +86,7 @@
 \begin{document}
 \title[Стратегии редукции термов в верификации]{Эвристические стратегии редукции термов в задачах формальной верификации}
 \author[Трилис А.А.]{Трилис Алексей Андреевич\\{\footnotesize\textcolor{gray}{научный руководитель: А.М.Ляшин}}}
-\institute{НИУ ВШЭ --- Санкт-Петербург}
+\institute{Предзащита магистерской диссертации\\\bigskip \footnotesize НИУ ВШЭ --- Санкт-Петербург}
 \date{28 апреля 2025 г.}
 \frame{\titlepage}
 
@@ -103,28 +103,22 @@
 \printtext[bibhyperref]{\printfield[citetitle]{labeltitle}}}
 
 \begin{frame}\frametitle{Фреймворк Ursus}
-\end{frame}
+\tiny
+  \tikzstyle{block} = [draw,thick,text centered, minimum height=2.8em,minimum width=12em]
+\begin{tikzpicture}[]
+\node [block] at (0,0) (1) {\textbf{Исходный код}};
+\node [block] at (1.53,-1.8) (2) {\textbf{Код на внутреннем языке Ursus}};
+\node [block] at (3.06,-3.6) (3) {\textbf{Система уравнений, описывающих код}};
+\node [block] at (0,-4.5) (6) {\textbf{Спецификация}};
+\node [block] at (4.59,-5.4) (4) {\textbf{Упрощённая спецификация}};
+\node [block] at (6.12,-7.2) (5) {\textbf{Верифицированная спецификация}};
+\draw [-latex,ultra thick] (1) --  node [right] {~~\tiny{\textit{Трансляция}}} (2) ;
+\draw [-latex,ultra thick] (2) --  node [right] {~~\tiny{\textit{Генерация символьных вычислений}}} (3) ;
+\draw [-latex,ultra thick,red] (3) --  node [right] {~~\tiny{\textit{Символьное вычисление}}} (4) node [sloped,midway](M){};
+\draw [-latex,ultra thick] (4) --  node [right] {~~\tiny{\textit{Полуавтоматическое доказательство}}} (5) ;
+\draw [-latex,ultra thick] (6) -- (M.center);
+\end{tikzpicture}
 
-\renewcommand{\arraystretch}{1.5}
-\begin{frame}\frametitle{Редукции в Coq}
-  \begin{adjustwidth}{-1.5em}{-1.5em}
-  \tiny
-  \begin{tabular}{|c|c|c|c|}
-    \hline
-    Редукция & Порядок & Достоинства & Недостатки\\
-    \hline\hline
-    \texttt{cbv} & call by value & Нет дубликации вычислений &
-    \begin{tabular}{@{}c@{}}Мёртвый код \\[2pt] Неэффективность реализации\footcite{gross_phd} \end{tabular} \\
-    \hline
-    \texttt{lazy} & call by need & \begin{tabular}{@{}c@{}}Мёртвый код не вычисляется \\[2pt] Мемоизация вычислений \end{tabular}&
-    \begin{tabular}{@{}c@{}} Дубликация вычислений \\[2pt] Неэффективность реализации \end{tabular} \\
-    \hline
-    \texttt{native\_compute}\footcite{native} & call by value & Эффективность & \begin{tabular}{@{}c@{}} Вычисляет до конца \\[2pt] Не подходит для \\ символьного вычисления \end{tabular}\\
-    \hline
-    \texttt{vm\_compute}\footcite{vm} & call by value & Эффективность & \begin{tabular}{@{}c@{}} Вычисляет до конца \\[2pt] Не подходит для \\ символьного вычисления \end{tabular}\\
-    \hline
-   \end{tabular}
-  \end{adjustwidth}
 \end{frame}
 
 \begin{frame}[containsverbatim]\frametitle{Входные данные}
@@ -143,33 +137,53 @@
     \begin{tikzpicture}[remember picture, overlay]
         \draw[->, thick] ++(-0.2,0) -- ++(1.3,0);
     \end{tikzpicture}
-    \column{0.6\textwidth}\newenvironment{allintypewriter}{\ttfamily}{}\begin{allintypewriter}\textcolor{magenta}{y0} = стартовое состояние системы\\
-    \textcolor{magenta}{y1} = указатель на глобальную переменную \textcolor{violet}{result}\\
-    \textcolor{magenta}{y2} = \textcolor{magenta}{y0}, в котором создана новая переменная \textcolor{teal}{x} со значением \textcolor{magenta}{y1}\\
-    \textcolor{magenta}{y3} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y2}\\
-    \textcolor{magenta}{y4} = значение указателя \textcolor{magenta}{y3}\\
-    \textcolor{magenta}{y5} = \textcolor{magenta}{y4} + \textcolor{cyan}{a}\\
-    \textcolor{magenta}{y6} = \textcolor{magenta}{y2}, в котором значение переменной \textcolor{teal}{x} заменено на \textcolor{magenta}{y5}\\
-    \textcolor{magenta}{y7} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y6}\\
-    \textcolor{magenta}{y8} = значение указателя \textcolor{magenta}{y7}\\
-    \textcolor{magenta}{y9} = \textcolor{magenta}{y8} - \textcolor{cyan}{b}\\
-    \textcolor{magenta}{y10} = \textcolor{magenta}{y6}, в котором значение переменной \textcolor{teal}{x} заменено на \textcolor{magenta}{y9}\\
-    \textcolor{magenta}{y11} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y10}\\
-    \textcolor{magenta}{y12} = значение указателя \textcolor{magenta}{y11}\\
-    \textcolor{magenta}{y13} = \textcolor{magenta}{y10}, в котором значение глобальной переменной \textcolor{violet}{result} заменено на \textcolor{magenta}{y12}\\
-    \textcolor{magenta}{y14} = \textcolor{magenta}{y13} (итоговое состояние системы)
+    \column{0.6\textwidth}\newenvironment{allintypewriter}{\ttfamily}{}\begin{allintypewriter}\textcolor{magenta}{y1} = стартовое состояние системы\\
+    \textcolor{magenta}{y2} = указатель на глобальную переменную \textcolor{violet}{result}\\
+    \textcolor{magenta}{y3} = \textcolor{magenta}{y1}, в котором создана новая переменная \textcolor{teal}{x} со значением \textcolor{magenta}{y2}\\
+    \textcolor{magenta}{y4} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y3}\\
+    \textcolor{magenta}{y5} = значение указателя \textcolor{magenta}{y4}\\
+    \textcolor{magenta}{y6} = \textcolor{magenta}{y5} + \textcolor{cyan}{a}\\
+    \textcolor{magenta}{y7} = \textcolor{magenta}{y3}, в котором значение переменной \textcolor{teal}{x} заменено на \textcolor{magenta}{y6}\\
+    \textcolor{magenta}{y8} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y7}\\
+    \textcolor{magenta}{y9} = значение указателя \textcolor{magenta}{y8}\\
+    \textcolor{magenta}{y10} = \textcolor{magenta}{y9} - \textcolor{cyan}{b}\\
+    \textcolor{magenta}{y11} = \textcolor{magenta}{y7}, в котором значение переменной \textcolor{teal}{x} заменено на \textcolor{magenta}{y10}\\
+    \textcolor{magenta}{y12} = указатель на состояние переменной \textcolor{teal}{x} в \textcolor{magenta}{y11}\\
+    \textcolor{magenta}{y13} = значение указателя \textcolor{magenta}{y12}\\
+    \textcolor{magenta}{y14} = \textcolor{magenta}{y11}, в котором значение глобальной переменной \textcolor{violet}{result} заменено на \textcolor{magenta}{y13}\\
+    \textcolor{magenta}{y15} = \textcolor{magenta}{y14} (итоговое состояние системы)
     \end{allintypewriter}
     \end{columns}
   }
   \bigskip
   \begin{itemize}
-    \item Система уравнений $Y$ вида $y_i = T_i$
-    
-    Каждый $T_i$ может содержать $y_j\ (\ j < i\ )$
-    \item Спецификация $P$, использующая $y_i$
+    \item Система уравнений $Y$ вида $y_i = T_i(y_1, y_2, \dots, y_{i - 1})$
+    \item Спецификация $P(y_1, y_2, \dots, y_n)$
   \end{itemize}
   \bigskip
   Нужно упростить $P$, подставив все $y_i$ и вычислив результат
+\end{frame}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{frame}\frametitle{Редукции в Coq}
+  \begin{adjustwidth}{-1.5em}{-1.5em}
+  \tiny
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    Редукция & Порядок & Достоинства & Недостатки\\
+    \hline\hline
+    \texttt{cbv} & call by value & Нет дубликации вычислений &
+    \begin{tabular}{@{}c@{}}Мёртвый код \\[2pt] Неэффективность реализации\footcite{gross_phd} \end{tabular} \\
+    \hline
+    \texttt{lazy} & call by need & \begin{tabular}{@{}c@{}}Мёртвый код не вычисляется \\[2pt] Мемоизация вычислений \end{tabular}&
+    \begin{tabular}{@{}c@{}} Дубликация вычислений\footnote{\url{https://github.com/rocq-prover/rocq/issues/18520}} \\[2pt] Неэффективность реализации\footnotemark[3] \end{tabular} \\
+    \hline
+    \texttt{native\_compute}\footcite{native} & call by value & Эффективность & \begin{tabular}{@{}c@{}} Вычисляет до конца\footnote{\label{opaque}\url{https://github.com/rocq-prover/rocq/issues/4476}} \\[2pt] Не подходит для \\ символьного вычисления \end{tabular}\\
+    \hline
+    \texttt{vm\_compute}\footcite{vm} & call by value & Эффективность & \begin{tabular}{@{}c@{}} Вычисляет до конца\footnotemark[6] \\[2pt] Не подходит для \\ символьного вычисления \end{tabular}\\
+    \hline
+   \end{tabular}
+  \end{adjustwidth}
 \end{frame}
 
 \begin{frame}\frametitle{Цель и задачи}
@@ -177,7 +191,7 @@
 
 \textbf{Задачи}:
 \begin{itemize}
-	\item Разработать несколько стратегий вычисления, используя классические порядки редукций и эвристики, продиктованные структурой специфических для системы Ursus данных.
+	\item Разработать несколько стратегий вычисления, используя классические порядки редукций и эвристики, продиктованные структурой специфических для Ursus данных.
 	\item Подготовить репрезентативный набор программ на Ursus для использования в качестве тестовых данных.
 	\item Сравнить разработанные стратегии на тестовом наборе и выявить среди них наиболее производительные.
 \end{itemize}
@@ -323,7 +337,7 @@
     \begin{itemize}
       \item Определять indeg и outdeg сложно и долго
       \item Воспользуемся информацией о типах
-      \item Все вершины типов LocalStateMapping и FieldType имеют indeg = outdeg = 1
+      \item Все вершины типов LocalStateMapping\footnote{состояние локальных переменных} и FieldType\footnote{проекции структур} имеют indeg = outdeg = 1
     \end{itemize}
     \begin{megaalgorithm}\tiny
       \caption{\tiny contractions-typebased}
@@ -350,7 +364,7 @@
   \includegraphics[width=\textwidth]{hash2if4.png}
   \column{0.75\textwidth}
   \begin{itemize}
-    \item Вершины типа Ledger, как правило, имеют большой outdeg
+    \item Вершины типа Ledger\footnote{глобальное состояние}, как правило, имеют большой outdeg
     \item Почти все вершины других типов имеют outdeg = 1
   \end{itemize}
   \begin{megaalgorithm}\tiny 
@@ -386,38 +400,73 @@
   \end{frame}
 
 \begin{frame}\frametitle{Сравнение. bottomup}
-\begin{itemize}
-  \item TODO
-  \item TODO
-\end{itemize}
+\begin{columns}
+  \column{0.6\textwidth}
+  \includegraphics[width=\textwidth]{bottomup.png}
+  \column{0.6\textwidth}
+  \includegraphics[width=\textwidth]{bottomup_reductions.png}
+\end{columns}
+\centering \texttt{bottomup}~--- все экспоненциальные
 \end{frame}
 
-\begin{frame}\frametitle{Сравнение. ??}
-TODO
+\begin{frame}\frametitle{Сравнение. Базовые стратегии}
+  \begin{columns}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{basic_simple.png}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{basic_recursion.png}
+  \end{columns}
+
+  \bigskip
+  \centering \texttt{topdown} уже эффективнее \texttt{native}
+  \bigskip
+
+  \texttt{cbv} и \texttt{lazy} версии не различимы
+  \end{frame}
+
+\begin{frame}\frametitle{Сравнение. Эвристические стратегии}
+  \begin{columns}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{topdown.png}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{native.png}
+  \end{columns}
+
+  \bigskip
+  \centering
+  Любая эвристика улучшает результат \texttt{native}
+  \bigskip
+
+  Графовые эвристики хуже, чем эвристики на типах
+  \bigskip
+
+  Эвристики на типах показывают лучший результат
 \end{frame}
 
-\begin{frame}\frametitle{Сравнение. ??}
-\begin{itemize}
-  \item TODO
-  \item TODO
-\end{itemize}
-\end{frame}
+\begin{frame}\frametitle{Сравнение. Лучшие стратегии}
+  \begin{columns}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{winners_simple.png}
+    \column{0.6\textwidth}
+    \includegraphics[width=\textwidth]{winners_recursion.png}
+  \end{columns}
+  \bigskip
+  \centering
+
+  Лучшая стратегия~--- \texttt{native} с эвристикой на типах
+  \bigskip
+
+  Квадратичные, но с приемлимыми на практике константами
+  \end{frame}  
 
 \begin{frame}\frametitle{Результаты}
 \begin{itemize}
-    \item TODO
-    \item TODO
-    \item TODO
-    \item TODO
+    \item Разработано 40 стратегий, все они реализованы на языке Ltac
+    \item Создан репрезентативный набор программ на Ursus для бенчмаркинга
+    \item Лучшие стратегии демонстрируют асимптотическое улучшение в производительности относительно базовой
+    \item Эвристики, основанные на типах данных, показывают значительное неасимптотическое улучшение
+    \item Стратегии будут использоваться в дальнейших проектах по верификации
 \end{itemize}
 \end{frame}
 
-\appendix
-\backupbegin
-
-\begin{frame}\frametitle{Apx 1}
-TODO
-\end{frame}
-
-\backupend
 \end{document}
