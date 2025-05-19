@@ -1,18 +1,18 @@
 \documentclass[../thesis.tex]{subfiles}
 \begin{document}
 
-Интерактивное средство доказательств теорем Coq используется во многих работах по формальной верификации программ. Однако, средства Coq по вычислениям, необходимым для формальной верификации, зачастую оказываются недостаточно производительными для решения практических задач. В системе Ursus для верификации смарт-контрактов на Coq ключевой задачей является эффективное символьное вычисление результатов функций. Данная работа посвящена оптимизации этого процесса. Разработаны несколько стратегий вычисления, основанные на вызове по значению и вызове по необходимости, применяющие техники декомпозиции и эвристически учитывающие структуру и закономерности во входных данных. В том числе, исследуются эвристики, связанные с типами данных и графовыми характеристиками задачи. Разработанные стратегии сравниваются друг с другом как на синтетических, так и на реальных данных, и в результате для практического использования выбраны несколько стратегий, показавших наилучший результат.
+Интерактивное средство доказательств теорем Coq/Rocq используется во многих работах по формальной верификации программ. Однако, средства Coq по вычислениям, необходимым для формальной верификации, зачастую оказываются недостаточно производительными для решения практических задач. В системе Ursus для верификации смарт-контрактов на Coq ключевой задачей является эффективное символьное вычисление результатов функций. Данная работа посвящена оптимизации этого процесса. Разработаны несколько стратегий вычисления, основанные на вызове по значению и вызове по необходимости, применяющие техники декомпозиции и эвристически учитывающие структуру и закономерности во входных данных. В том числе, исследуются эвристики, связанные с типами данных и графовыми характеристиками задачи. Разработанные стратегии сравниваются друг с другом как на синтетических, так и на реальных данных, и в результате для практического использования выбраны несколько стратегий, показавших наилучший результат.
 
 \vspace*{\fill}
 
-Ключевые слова: формальная верификация, стратегии редукции, оптимизация, Coq, Ursus.
+Ключевые слова: формальная верификация, стратегии редукции, оптимизация, Coq, Rocq, Ursus.
 
 \newpage
 
-The interactive theorem prover Coq is widely used in many works on formal software verification. However, Coq's computational mechanisms, which are essential for formal verification, often lack the performance needed to solve practical problems. In the Ursus framework, designed for verifying smart contracts in Coq, a key challenge is the efficient symbolic evaluation of function results. This work is dedicated to optimizing that process. Several evaluation strategies have been developed, based on call-by-value and call-by-need approaches, employing decomposition techniques and heuristically taking into account structural patterns in the input data, including heuristics related to data types and graph-based characteristics of the problem. The developed strategies are compared against one another on both synthetic and real-world data, leading to the selection of several strategies that demonstrated the best results for practical use.
+The interactive theorem prover Coq/Rocq is widely used in many works on formal software verification. However, Coq's computational mechanisms, which are essential for formal verification, often lack the performance needed to solve practical problems. In the Ursus framework, designed for verifying smart contracts in Coq, a key challenge is the efficient symbolic evaluation of function results. This work is dedicated to optimizing that process. Several evaluation strategies have been developed, based on call-by-value and call-by-need approaches, employing decomposition techniques and heuristically taking into account structural patterns in the input data, including heuristics related to data types and graph-based characteristics of the problem. The developed strategies are compared against one another on both synthetic and real-world data, leading to the selection of several strategies that demonstrated the best results for practical use.
 
 \vspace*{\fill}
 
-Keywords: formal verification, reduction strategies, optimization, Coq, Ursus.
+Keywords: formal verification, reduction strategies, optimization, Coq, Rocq, Ursus.
 
 \end{document}
