@@ -24,6 +24,7 @@
 \usepackage{algorithm}
 \usepackage{caption}
 \usepackage{changepage}
+\usepackage{subcaption}
 \usetikzlibrary{tikzmark}
 \lstdefinestyle{highlight}{
   basicstyle=\footnotesize\ttfamily\color{black},
@@ -86,8 +87,8 @@
 \begin{document}
 \title[Стратегии редукции термов в верификации]{Эвристические стратегии редукции термов в задачах формальной верификации}
 \author[Трилис А.А.]{Трилис Алексей Андреевич\\{\footnotesize\textcolor{gray}{научный руководитель: А.М.Ляшин}}}
-\institute{Предзащита магистерской диссертации\\\bigskip \footnotesize НИУ ВШЭ --- Санкт-Петербург}
-\date{28 апреля 2025 г.}
+\institute{\footnotesize НИУ ВШЭ --- Санкт-Петербург}
+\date{9 июня 2025 г.}
 \frame{\titlepage}
 
 \begin{frame}\frametitle{Введение}
@@ -392,10 +393,10 @@
     \begin{itemize}
       \item Simple, линейный код
       \item Recursive, рекурсивный код
-      \item \textcolor{gray}{If, линейный код с условными операторами}
-      \item \textcolor{gray}{IfAndRecursion, рекурсивный код с условными операторами}
+      \item If, линейный код с условными операторами
+      \item IfAndRecursion, рекурсивный код с условными операторами
     \end{itemize}
-    \item \textcolor{gray}{Реальная часть. Верификация смарт-контракта мультисиг-кошелька из практики компании Pruvendo}
+    \item Реальная часть. Верификация смарт-контракта мультисиг-кошелька из практики компании Pruvendo
   \end{itemize}
   \end{frame}
 
@@ -411,17 +412,22 @@
 
 \begin{frame}\frametitle{Сравнение. Базовые стратегии}
   \begin{columns}
-    \column{0.6\textwidth}
+    \column{0.5\textwidth}
     \includegraphics[width=\textwidth]{basic_simple.png}
-    \column{0.6\textwidth}
+    \column{0.5\textwidth}
     \includegraphics[width=\textwidth]{basic_recursion.png}
   \end{columns}
 
-  \bigskip
-  \centering \texttt{topdown} уже эффективнее \texttt{native}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \includegraphics[width=\textwidth]{ledger_size.png}
+    \column{0.5\textwidth}
+  \small
+  \texttt{native} на некоторых примерах экспоненциален
   \bigskip
 
-  \texttt{cbv} и \texttt{lazy} версии не различимы
+  \texttt{lazy} значительно эффективнее при большой размерности состояния
+  \end{columns}
   \end{frame}
 
 \begin{frame}\frametitle{Сравнение. Эвристические стратегии}
@@ -434,8 +440,6 @@
 
   \bigskip
   \centering
-  Любая эвристика улучшает результат \texttt{native}
-  \bigskip
 
   Графовые эвристики хуже, чем эвристики на типах
   \bigskip
@@ -445,28 +449,136 @@
 
 \begin{frame}\frametitle{Сравнение. Лучшие стратегии}
   \begin{columns}
-    \column{0.6\textwidth}
+    \column{0.5\textwidth}
     \includegraphics[width=\textwidth]{winners_simple.png}
-    \column{0.6\textwidth}
+    \column{0.5\textwidth}
     \includegraphics[width=\textwidth]{winners_recursion.png}
   \end{columns}
-  \bigskip
-  \centering
-
-  Лучшая стратегия~--- \texttt{native} с эвристикой на типах
-  \bigskip
-
-  Квадратичные, но с приемлемыми на практике константами
+  \begin{columns}
+    \column{0.5\textwidth}
+    \includegraphics[width=\textwidth]{loglog_simple.png}
+    \column{0.5\textwidth}
+    \includegraphics[width=\textwidth]{loglog_recursion.png}
+  \end{columns}
   \end{frame}  
 
 \begin{frame}\frametitle{Результаты}
 \begin{itemize}
     \item Разработано 40 стратегий, все они реализованы на языке Ltac
     \item Создан набор программ на Ursus для бенчмаркинга
-    \item Лучшие стратегии демонстрируют асимптотическое улучшение в производительности относительно базовой
-    \item Эвристики, основанные на типах данных, показывают значительное неасимптотическое улучшение
+    \item Лучшая стратегии демонстрирует асимптотическое улучшение в производительности относительно базовой
+    \item Самая эффективная стратегия на всех рассмотренных программах не показывает результат значимо хуже любой другой стратегии
     \item Стратегии будут использоваться в дальнейших проектах по верификации
 \end{itemize}
 \end{frame}
+
+\appendix
+\backupbegin
+
+\begin{frame}\frametitle{Сравнение. Код с условными операторами}
+\begin{columns}
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{basic_if.png}
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{basic_ifrec.png}
+\end{columns}
+\begin{columns}
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{topdown_ifrec.png}
+  \column{0.5\textwidth}
+  \includegraphics[width=\textwidth]{native_ifrec.png}
+\end{columns}
+\end{frame}
+
+\begin{frame}\frametitle{Сравнение. Реальные данные}
+{\fontsize{4}{6}\selectfont \begin{table}[h]
+\subfloat{\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{Характеристики функций} \\
+\hline
+Функция & Строк & Вызовов функций & Глубина рекурсии & Условных операторов \\
+\hline
+submit & 45 & 15 & 2 & 7\\
+\hline
+confirm & 22 & 7 & 2 & 4 \\
+\hline
+send & 4 & 2 & 1 & 2 \\
+\hline
+\end{tabular}}
+\quad
+\subfloat{\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{submitTransaction} \\
+\hline
+\textbf{} & \textbf{NL} & \textbf{NCSTL} & \textbf{TL} & \textbf{TCSTL} \\
+\hline
+1 & 0.90 & \textbf{0.90} & 1.46 & 1.24 \\
+\hline
+2 & 0.95 & \textbf{0.84} & 1.05 & 1.04 \\
+\hline
+3 & 0.99 & \textbf{0.94} & 1.44 & 1.43 \\
+\hline
+4 & 1.86 & \textbf{1.51} & 3.58 & 2.93 \\
+\hline
+5 & 1.44 & \textbf{1.22} & 12.26 & 7.99 \\
+\hline
+6 & 23.40 & \textbf{7.46} & 46.16 & 58.54 \\
+\hline
+7 & 23.63 & \textbf{7.75} & 41.19 & 58.16 \\
+\hline
+QED & \textbf{11.51} & 12.63 & 78.09 & 87.26 \\
+\hline
+$\Sigma$ & 64.68 & \textbf{33.25} & 185.23 & 218.59 \\
+\hline
+\end{tabular}}
+\quad
+\subfloat{\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{confirmTransaction} \\
+\hline
+\textbf{} & \textbf{NL} & \textbf{NCSTL} & \textbf{TL} & \textbf{TCSTL} \\
+\hline
+1 & 0.69 & 0.65 & \textbf{0.53} & 0.49 \\
+\hline
+2 & 0.78 & \textbf{0.70} & 1.03 & 0.70 \\
+\hline
+3 & 0.10 & \textbf{0.09} & 0.11 & 0.10 \\
+\hline
+4 & 1.73 & \textbf{1.44} & 1.62 & 2.08 \\
+\hline
+5 & 1.79 & \textbf{1.25} & 3.03 & 2.20 \\
+\hline
+6 & \textbf{0.20} & 0.22 & \textbf{0.20} & \textbf{0.20} \\
+\hline
+7 & 2.08 & \textbf{1.35} & 3.47 & 2.53 \\
+\hline
+8 & 3.64 & \textbf{2.03} & 5.68 & 4.65 \\
+\hline
+9 & 16.80 & 12.33 & 12.86 & \textbf{11.79} \\
+\hline
+QED & \textbf{10.25} & 10.34 & 31.74 & 26.73 \\
+\hline
+$\Sigma$ & 38.06 & \textbf{30.4} & 60.27	& 51.47 \\
+\hline
+\end{tabular}}
+\quad
+\subfloat{\begin{tabular}{|c|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{sendTransaction} \\
+\hline
+\textbf{} & \textbf{NL} & \textbf{NCSTL} & \textbf{TL} & \textbf{TCSTL} \\
+\hline
+1 & 3.42 & 2.87 & \textbf{2.30} & 5.69 \\
+\hline
+QED & 2.5 & \textbf{2.39} & 3.8 & 4.53 \\
+\hline
+$\Sigma$ & 5.92	& \textbf{5.26} & 6.1 & 10.22 \\
+\hline
+\end{tabular}}
+\label{results_multisig}
+\end{table}}
+\end{frame}
+
+\backupend
 
 \end{document}
